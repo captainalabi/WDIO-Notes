@@ -1,0 +1,44 @@
+1. TO RUN SPECIFIC SUITE OF TEST
+INDICATE THE NAME OF THE SUITS IN WDIO.CONFIG AS FOLLOWS:
+
+"scripts": {
+    "test": "wdio",
+    "actions": "wdio --suite actions",
+    "login": "wdio --suite login"
+  },
+
+Actions and login are two suits declared above and you
+run them with the commands indicated:
+
+wdio --suite <suite name>
+
+2. WHEN RETURNING A VALUE FROM WDIO
+You can add await when returning a value from a WDIO
+function by wrapping it along with the function in a
+pair of brackets:
+
+return (await function/expression)
+
+3. USING DATA FILES IN YOUR TESTS
+You can use data files to save variable names in your test
+such as login username and password. 
+In the file, you declare a module, export it and declare
+your key:value pairs
+Example:
+
+export.module = {
+username : "alabi"
+password : "razaq"
+}
+
+Then, in your test, you access the values with the keys
+But you need to import or require the file first and 
+use keyword.key to access each value.
+
+
+
+
+
+
+
+
