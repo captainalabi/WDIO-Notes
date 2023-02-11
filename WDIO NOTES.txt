@@ -35,10 +35,109 @@ Then, in your test, you access the values with the keys
 But you need to import or require the file first and 
 use keyword.key to access each value.
 
+4. ADDING BASE URLS IN ENVIRONMENT VARIABLES
+This will enable you to be able to run your tests with different 
+urls such as when you have different urls for different 
+environments like production env, staging env, dev env and QA env.
 
+1. You create a file and initialize key:value pairs for each url
+2. require the file in your config file at the very top
+3. below the require, declare a constant to process any of 
+the url we indicate at runtime in terminal
+4. Declare an if statement in case the url could not be fould
+to display a message.
+5. Change the value of the baseurl as follows:
+baseUrl: url[process.env.ENV]
 
+Example:
 
+module.exports = {
+    qa: 'http://the-internet.herokuapp.com',
+    dev: 'https://www.google.com/',
+    staging: 'https://www.yahoo.com/'
+} 
 
+const ENV = process.env.ENV
+if (!ENV || !['qa', 'dev', 'staging'].includes(ENV)) {
+    console.log('Please use the following format when running the test script: ENV=qa|dev|staging')
+    process.exit()
+}
 
+6. To run your test, indicate your desired url by appending
+Env= <envName> before the test command like this:
+ENV=qa npm run actions
 
+//linkedin
+
+5. USING browser.debug()
+browser.debug() is used to stop the browser to enable you to 
+inspect and interact with the browser in order to see what is
+going on if there are some itches or failures. It is recommended
+that you increase the timeout of your test to avoid failure due to
+timeouts
+
+6. FILE UPLOAD
+
+To upload a file, the element: "input type button" is the most
+important. It may be visible or hidden in some web app. make sure
+you set it to visible before you carry out the file upload becouse you have to 
+be able to click on it while your test is running.
+
+1. To make it visible, you have to disconnect it from the js code that
+set it to hidden usually with the class. By setting the className to 
+empty, it should become visible:
+
+	document.querySelector("<selector>").className=""
+
+Wrap the code above in browser.execute() command
+
+	browser.execute(document.querySelector("<selector>").className="")
+
+2. //declear file path
+const filePath = (path/to/file)
+
+3. //attach path to browser
+const remoteFilePath = await browser.uploadFile(filePath)
+
+4. Attach browser path to the type file element
+ await MainPagePage.fileUploadButton.setValue(remoteFilePath)
+
+5. //click the type file element
+
+//assertion
+await expect(MainPagePage.uploadedMessage).toHaveText('File Uploaded!')
+
+If input type file is not hidden, start from step 2.
+
+7. WORKING WITH IFRAME
+
+A. open browser
+B. Identify iframe
+C. switch to iframe using browser.switchToIframe(iframe) command
+D. test on any element on iframe as usual
+
+IF YOU NEED TO CARRY OUT FURTHER TEST OUT OF THE IFRAME
+
+A. Exit the iframe with switchToParentFrame() command
+B. carry out test on any element on parent frame as usual
+
+8. HOW TO SET UP AUTO COMPLETION
+
+A. create a jsconfig.json file in the root folder
+B. copy the following setup from wdio autocompletion page (https://webdriver.io/docs/autocompletion/), paste
+it and save. add the exlude portion to it. You are good to go:
+
+{
+    "compilerOptions": {
+        "types": [
+            "node",
+            "@wdio/globals/types",
+            "@wdio/mocha-framework"
+        ]
+    },
+    
+    "exclude": [
+        "node_modules"
+    ]
+}
 
